@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Happy Birthday Val!</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="bg-decor" id="bgDecor"></div>
+
+<div class="page active" id="page1">
+  <div class="landing-wrap">
+    <div class="landing-title">HAWOOOOOOOO</div>
+    <div class="landing-sub">click anywhere to continue</div>
+  </div>
+</div>
+
+<div class="page" id="page2">
+  <button class="back-btn" onclick="goTo('page1')" aria-label="Kembali">
+    <img src="assets/backnav.png" alt="">
+  </button>
+
+  <div class="page2-stack">
+    <div class="scroll-card" id="scrollCard">
+      <div class="scroll-text" id="letterTextbox" onclick="nextParagraph()">
+        <p id="letterParagraph"></p>
+      </div>
+
+      <button class="heart-btn heart-prev" id="prevBtn" aria-label="Sebelumnya" onclick="event.stopPropagation(); prevParagraph()"></button>
+      <div class="dots" id="dots"></div>
+      <button class="heart-btn heart-next" id="nextBtnArrow" aria-label="Selanjutnya" onclick="event.stopPropagation(); nextParagraph()"></button>
+    </div>
+
+    <button class="gift-btn gift-hide" id="toMemoriesBtn" onclick="openGift()" aria-label="Buka hadiah">
+      <span class="gift-sprite" id="giftSprite"></span>
+    </button>
+  </div>
+</div>
+
+<div class="page" id="page3">
+  <div class="p3-scene" aria-hidden="true">
+    <div class="p3-float" id="p3Float"></div>
+    <i class="p3-check c-tr"></i><i class="p3-check c-bl"></i>
+    <i class="p3-cloud cl-tl"></i><i class="p3-cloud cl-tr"></i><i class="p3-cloud cl-bl"></i><i class="p3-cloud cl-br"></i>
+    <i class="p3-pl pl1"></i><i class="p3-pl pl2"></i><i class="p3-pl pl3"></i><i class="p3-pl pl4"></i><i class="p3-pl pl5"></i>
+    <img class="p3-capy" src="assets/p3/capy_new.png" alt="">
+  </div>
+
+  <button class="back-btn p3-back" onclick="goTo('page2')" aria-label="Kembali">
+    <img src="assets/p3/back_pink.png" alt="">
+  </button>
+
+  <div class="memories-title">
+    <span class="t-text" data-text="Happy Birthday :3">Happy Birthday :3</span>
+  </div>
+
+  <div class="memories-grid">
+    <div class="memory-card pixel-card" onclick="openEnvelope(this,'notes')">
+      <i class="cdeco bow tl"></i>
+      <i class="cdeco spark s1"></i><i class="cdeco spark s2"></i>
+      <div class="mc-inner">
+        <div class="mc-icon">
+          <span class="mc-env">
+            <img class="ef ef1" src="assets/p3/letter_f1.png" alt="A Letter">
+            <img class="ef ef2" src="assets/p3/letter_f2.png" alt="">
+            <img class="ef ef3" src="assets/p3/letter_f3.png" alt="">
+            <img class="ef ef4" src="assets/p3/letter_f4.png" alt="">
+          </span>
+        </div>
+        <div class="memory-label">A Letter<br>:3</div>
+      </div>
+    </div>
+    <div class="memory-card pixel-card" onclick="openEnvelope(this,'songs')">
+      <i class="cdeco spark s1"></i><i class="cdeco spark s2"></i>
+      <div class="mc-inner">
+        <div class="mc-icon">
+          <img class="mc-vinyl" src="assets/vinyl.png" alt="Songs that remind me of you">
+        </div>
+        <div class="memory-label small">Songs that<br>remind me of you</div>
+      </div>
+    </div>
+    <div class="memory-card pixel-card" onclick="openEnvelope(this,'flower')">
+      <i class="cdeco bow tr"></i>
+      <i class="cdeco spark s1"></i><i class="cdeco spark s2"></i>
+      <div class="mc-inner">
+        <div class="mc-icon">
+          <img class="mc-flower" src="assets/flower1.png" alt="Flower">
+        </div>
+        <div class="memory-label">Flower<br>&lt;3</div>
+      </div>
+    </div>
+  </div>
+
+  <button class="to-final-btn" onclick="goToFinal()" aria-label="Go to birthday cake" title="Birthday cake">
+    <span class="cb-cake" role="img" aria-label="Birthday cake"></span>
+    <img class="cb-bunny" src="assets/p3/bunny_new.png" alt="">
+  </button>
+</div>
+
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title" id="modalTitle"></div>
+    <div class="modal-content" id="modalContent"></div>
+  </div>
+</div>
+
+<div class="page" id="page4">
+  <button class="back-btn" onclick="goTo('page3')" aria-label="Kembali">
+    <img src="assets/backnav.png" alt="">
+  </button>
+
+  <div class="final-instruction" id="candleHint">Tap/Klik lilinnya buat tiup lilinnya! 🎂</div>
+
+  <div class="cake-wrap" id="cakeWrap" onclick="blowCandle()" role="button" aria-label="Tiup lilin">
+    <span class="cake-lit" id="cakeLit"></span>
+    <span class="cake-out" id="cakeOut"></span>
+  </div>
+
+  <div class="final-card" id="finalCard">
+    <i class="fc-deco fc-deco-l" aria-hidden="true"></i>
+    <i class="fc-deco fc-deco-r" aria-hidden="true"></i>
+    <div class="final-main">Make a wish! May all your dreams come true this year. Happy Birthday once again, Milady!</div>
+    <div class="final-sub">Be happy terus ya bauk! byee byeee wuvuu</div>
+    <a class="wa-btn" href="https://wa.me/6281384681339" target="_blank" rel="noopener" aria-label="Say hello to me hihi">Say hello to me hihi !&gt;</a>
+  </div>
+</div>
+
+<div id="giftWipe" aria-hidden="true"></div>
+
+<div class="bgm-ctl" id="bgmCtl" role="group" aria-label="Pengaturan backsound">
+  <button type="button" class="bgm-mute" id="bgmMute" aria-label="Matikan backsound" aria-pressed="false">
+    <svg viewBox="0 0 10 10" width="22" height="22" shape-rendering="crispEdges" aria-hidden="true">
+      <path fill="currentColor" d="M1 4h2V3h1V2h1v6H4V7H3V6H1z"/>
+      <g class="w"><path fill="currentColor" d="M6 4h1v2H6zM7 3h1v4H7zM8 2h1v6H8z"/></g>
+      <g class="x"><path fill="currentColor" d="M6 3h1v1H6zM7 4h1v1H7zM8 5h1v1H8zM6 6h1v1H6zM8 3h1v1H8zM8 6h1v1H8z"/></g>
+    </svg>
+  </button>
+  <input type="range" class="bgm-vol" id="bgmVol" min="0" max="100" step="5" value="35" aria-label="Volume backsound">
+</div>
+
+<canvas id="confetti-canvas"></canvas>
+<script src="bgm.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
