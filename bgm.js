@@ -1,10 +1,15 @@
-
+/* Romantic background music + interactive sound effects
+   Everything is generated with WebAudio (no mp3 needed).
+   API: bgm.start(), bgm.toggleMute(), bgm.setVolume(0..1), bgm.duck(bool), bgm.sfx(name)
+   sfx names: tap, type, whoosh, paper, leaf, vinyl, blow, sparkle */
 const bgm = (function () {
   const BPM = 64;
-  const STEP = 60 / BPM / 2; 
+  const STEP = 60 / BPM / 2; // eighth note
+  const LOOKAHEAD = 1.0; // schedule far ahead so busy phones/animations cannot starve the music
   const DEFAULT_VOL = 0.5;
   const KEY = "bgm-settings-v2";
 
+  // one chord per bar: bass, arpeggio tones, pad tones
   const chords = [
     { b: "C3", a: ["E4", "G4", "B4", "C5"], p: ["C4", "E4", "G4", "B4"] },   // Cmaj7
     { b: "A2", a: ["C4", "E4", "G4", "A4"], p: ["A3", "C4", "E4", "G4"] },   // Am7
@@ -43,13 +48,15 @@ const bgm = (function () {
   }
   const freq = (n) => 440 * Math.pow(2, (midi(n) - 69) / 12);
 
+  /* ---------- music voices ---------- */
+  // soft plucked bell / music-box / electric piano
   function pluck(f, t, vol, decay) {
     const g = ctx.createGain();
     g.gain.setValueAtTime(0.0001, t);
     g.gain.linearRampToValueAtTime(vol, t + 0.012);
     g.gain.exponentialRampToValueAtTime(0.0001, t + decay);
     g.connect(bus);
-    [[1, 1], [2, 0.22], [3.01, 0.06]].forEach(([mul, amp]) => {
+    [[1, 1], [2, 0.22]].forEach(([mul, amp]) => {
       const o = ctx.createOscillator(), a = ctx.createGain();
       o.type = "sine"; o.frequency.setValueAtTime(f * mul, t);
       a.gain.value = amp;
@@ -57,7 +64,7 @@ const bgm = (function () {
       o.start(t); o.stop(t + decay + 0.05);
     });
   }
-
+  // warm pad: two slightly detuned triangles through a lowpass
   function pad(f, t, dur, vol) {
     const g = ctx.createGain(), lp = ctx.createBiquadFilter();
     lp.type = "lowpass"; lp.frequency.value = 1000; lp.Q.value = 0.3;
@@ -66,11 +73,9 @@ const bgm = (function () {
     g.gain.setValueAtTime(vol, t + dur - 1.3);
     g.gain.linearRampToValueAtTime(0.0001, t + dur);
     lp.connect(g); g.connect(bus);
-    [-6, 6].forEach((c) => {
-      const o = ctx.createOscillator();
-      o.type = "triangle"; o.frequency.setValueAtTime(f, t); o.detune.value = c;
-      o.connect(lp); o.start(t); o.stop(t + dur + 0.05);
-    });
+    const o = ctx.createOscillator();
+    o.type = "triangle"; o.frequency.setValueAtTime(f, t);
+    o.connect(lp); o.start(t); o.stop(t + dur + 0.05);
   }
   function bass(f, t, dur, vol) {
     const o = ctx.createOscillator(), g = ctx.createGain();
@@ -98,6 +103,9 @@ const bgm = (function () {
     step++;
   }
   function tick() {
+    if (!ctx || ctx.state !== "running") return;
+    // if the timer was starved for a long time, skip ahead instead of dumping old notes at once
+    if (nextTime < ctx.currentTime - 0.1) nextTime = ctx.currentTime + 0.05;
     while (nextTime < ctx.currentTime + LOOKAHEAD) { schedule(nextTime); nextTime += STEP; }
   }
 
@@ -124,6 +132,7 @@ const bgm = (function () {
     o.start(t); o.stop(t + decay + 0.05);
   }
   const r = (a, b) => a + Math.random() * (b - a);
+  let lastType = 0;
 
   const sfxLib = {
     tap(t) { blip(660, t, 0.13, 0.12); blip(990, t + 0.04, 0.06, 0.14); },
@@ -131,7 +140,7 @@ const bgm = (function () {
       const f = noise(t, 0.5, "bandpass", 700, 0.6, 0.12, { a: 0.18 });
       f.frequency.exponentialRampToValueAtTime(2200, t + 0.45);
     },
-
+    // paper envelope: dry crinkles + a slide
     paper(t) {
       noise(t, 0.28, "bandpass", 1400, 0.7, 0.12, { a: 0.05 }).frequency.exponentialRampToValueAtTime(900, t + 0.25);
       for (let k = 0; k < 7; k++) {
@@ -141,7 +150,7 @@ const bgm = (function () {
       }
       noise(t + 0.38, 0.22, "bandpass", 1800, 0.8, 0.11, { a: 0.08 });
     },
-
+    // leaves rustling: airy swell with soft flutters
     leaf(t) {
       noise(t, 1.0, "bandpass", 3600, 0.5, 0.11, { a: 0.35 });
       noise(t, 1.0, "highpass", 5200, 0.4, 0.05, { a: 0.4 });
@@ -154,15 +163,17 @@ const bgm = (function () {
       for (let k = 0; k < 14; k++) noise(t + 0.08 + k * r(0.02, 0.06), 0.012, "highpass", 3000, 0.5, r(0.04, 0.12), { a: 0.001 });
       noise(t + 0.1, 0.7, "highpass", 4500, 0.4, 0.02, { a: 0.2 });
     },
-
+    // blowing out a candle: breath, then a faint puff
     blow(t) {
       const f = noise(t, 0.9, "bandpass", 900, 0.7, 0.42, { a: 0.07 });
       f.frequency.exponentialRampToValueAtTime(380, t + 0.8);
       noise(t, 0.8, "lowpass", 1600, 0.4, 0.2, { a: 0.09 });
       noise(t + 0.55, 0.12, "highpass", 4000, 0.5, 0.07, { a: 0.003 });
     },
-
+    // pixel typing blip (square wave, random pitch from a pentatonic set)
     type(t) {
+      if (t - lastType < 0.045) return;
+      lastType = t;
       const notes = [523.25, 587.33, 659.25, 783.99, 880, 987.77];
       const f = notes[Math.floor(Math.random() * notes.length)];
       const o = ctx.createOscillator(), g = ctx.createGain(), lp = ctx.createBiquadFilter();
@@ -195,9 +206,9 @@ const bgm = (function () {
     sfxBus.gain.setTargetAtTime(off ? 0 : 0.35 + 0.65 * volume, ctx.currentTime, 0.03);
   }
   function makeReverb() {
-    const len = Math.floor(ctx.sampleRate * 3.2);
-    const ir = ctx.createBuffer(2, len, ctx.sampleRate);
-    for (let ch = 0; ch < 2; ch++) {
+    const len = Math.floor(ctx.sampleRate * 2.2);
+    const ir = ctx.createBuffer(1, len, ctx.sampleRate);
+    for (let ch = 0; ch < 1; ch++) {
       const d = ir.getChannelData(ch);
       for (let k = 0; k < len; k++) d[k] = (Math.random() * 2 - 1) * Math.pow(1 - k / len, 2.6);
     }
@@ -228,8 +239,9 @@ const bgm = (function () {
     for (let k = 0; k < d.length; k++) d[k] = Math.random() * 2 - 1;
     applyGain();
     nextTime = ctx.currentTime + 0.1;
-    timer = setInterval(tick, 40);
+    timer = setInterval(tick, 100);
     if (ctx.state === "suspended") ctx.resume();
+    ctx.onstatechange = () => console.info("[bgm] audio state:", ctx.state);
   }
 
   document.addEventListener("visibilitychange", () => {
@@ -272,10 +284,15 @@ const bgm = (function () {
       ["click", "pointerdown"].forEach((ev) => slider.addEventListener(ev, (e) => e.stopPropagation()));
       slider.addEventListener("input", () => { start(); setVolume(slider.value / 100); });
     }
-  
-    const first = () => { start(); };
-    document.addEventListener("pointerdown", first, { once: true });
-    document.addEventListener("keydown", first, { once: true });
+    // browsers block audio until a real user gesture (on phones only touchend/click
+    // count), so keep retrying on every gesture until the audio is actually running
+    const evs = ["pointerdown", "pointerup", "touchend", "click", "keydown"];
+    const unlock = () => {
+      start();
+      if (ctx && ctx.state === "suspended") ctx.resume();
+      if (ctx && ctx.state === "running") evs.forEach((e) => document.removeEventListener(e, unlock, true));
+    };
+    evs.forEach((e) => document.addEventListener(e, unlock, true));
     updateUI();
   }
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
