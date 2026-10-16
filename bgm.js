@@ -1,15 +1,10 @@
-/* Romantic background music + interactive sound effects
-   Everything is generated with WebAudio (no mp3 needed).
-   API: bgm.start(), bgm.toggleMute(), bgm.setVolume(0..1), bgm.duck(bool), bgm.sfx(name)
-   sfx names: tap, whoosh, paper, leaf, vinyl, blow, sparkle */
+
 const bgm = (function () {
   const BPM = 64;
-  const STEP = 60 / BPM / 2; // eighth note
-  const LOOKAHEAD = 0.25;
+  const STEP = 60 / BPM / 2; 
   const DEFAULT_VOL = 0.5;
   const KEY = "bgm-settings-v2";
 
-  // one chord per bar: bass, arpeggio tones, pad tones
   const chords = [
     { b: "C3", a: ["E4", "G4", "B4", "C5"], p: ["C4", "E4", "G4", "B4"] },   // Cmaj7
     { b: "A2", a: ["C4", "E4", "G4", "A4"], p: ["A3", "C4", "E4", "G4"] },   // Am7
@@ -48,8 +43,6 @@ const bgm = (function () {
   }
   const freq = (n) => 440 * Math.pow(2, (midi(n) - 69) / 12);
 
-  /* ---------- music voices ---------- */
-  // soft plucked bell / music-box / electric piano
   function pluck(f, t, vol, decay) {
     const g = ctx.createGain();
     g.gain.setValueAtTime(0.0001, t);
@@ -64,7 +57,7 @@ const bgm = (function () {
       o.start(t); o.stop(t + decay + 0.05);
     });
   }
-  // warm pad: two slightly detuned triangles through a lowpass
+
   function pad(f, t, dur, vol) {
     const g = ctx.createGain(), lp = ctx.createBiquadFilter();
     lp.type = "lowpass"; lp.frequency.value = 1000; lp.Q.value = 0.3;
@@ -138,7 +131,7 @@ const bgm = (function () {
       const f = noise(t, 0.5, "bandpass", 700, 0.6, 0.12, { a: 0.18 });
       f.frequency.exponentialRampToValueAtTime(2200, t + 0.45);
     },
-    // paper envelope: dry crinkles + a slide
+
     paper(t) {
       noise(t, 0.28, "bandpass", 1400, 0.7, 0.12, { a: 0.05 }).frequency.exponentialRampToValueAtTime(900, t + 0.25);
       for (let k = 0; k < 7; k++) {
@@ -148,7 +141,7 @@ const bgm = (function () {
       }
       noise(t + 0.38, 0.22, "bandpass", 1800, 0.8, 0.11, { a: 0.08 });
     },
-    // leaves rustling: airy swell with soft flutters
+
     leaf(t) {
       noise(t, 1.0, "bandpass", 3600, 0.5, 0.11, { a: 0.35 });
       noise(t, 1.0, "highpass", 5200, 0.4, 0.05, { a: 0.4 });
@@ -161,12 +154,25 @@ const bgm = (function () {
       for (let k = 0; k < 14; k++) noise(t + 0.08 + k * r(0.02, 0.06), 0.012, "highpass", 3000, 0.5, r(0.04, 0.12), { a: 0.001 });
       noise(t + 0.1, 0.7, "highpass", 4500, 0.4, 0.02, { a: 0.2 });
     },
-    // blowing out a candle: breath, then a faint puff
+
     blow(t) {
       const f = noise(t, 0.9, "bandpass", 900, 0.7, 0.42, { a: 0.07 });
       f.frequency.exponentialRampToValueAtTime(380, t + 0.8);
       noise(t, 0.8, "lowpass", 1600, 0.4, 0.2, { a: 0.09 });
       noise(t + 0.55, 0.12, "highpass", 4000, 0.5, 0.07, { a: 0.003 });
+    },
+
+    type(t) {
+      const notes = [523.25, 587.33, 659.25, 783.99, 880, 987.77];
+      const f = notes[Math.floor(Math.random() * notes.length)];
+      const o = ctx.createOscillator(), g = ctx.createGain(), lp = ctx.createBiquadFilter();
+      o.type = "square"; o.frequency.setValueAtTime(f, t);
+      lp.type = "lowpass"; lp.frequency.value = 2600;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.linearRampToValueAtTime(0.045, t + 0.003);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.05);
+      o.connect(lp); lp.connect(g); g.connect(sfxBus);
+      o.start(t); o.stop(t + 0.07);
     },
     sparkle(t) {
       ["E6", "G6", "B6", "E7", "G7"].forEach((n, k) => blip(freq(n), t + k * 0.075, 0.07, 0.7));
@@ -266,7 +272,7 @@ const bgm = (function () {
       ["click", "pointerdown"].forEach((ev) => slider.addEventListener(ev, (e) => e.stopPropagation()));
       slider.addEventListener("input", () => { start(); setVolume(slider.value / 100); });
     }
-    // browsers block audio until the first interaction
+  
     const first = () => { start(); };
     document.addEventListener("pointerdown", first, { once: true });
     document.addEventListener("keydown", first, { once: true });

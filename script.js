@@ -112,6 +112,7 @@ function typeParagraph(text, instant) {
     }
     const el = charEls[i++];
     el.classList.add("on", "cur");
+    if (el.textContent.trim()) sfx("type");
     const pause = /[.,!?:>]/.test(el.textContent);
     typingTimer = setTimeout(step, pause ? 190 : 38 + Math.random() * 26);
   })();
