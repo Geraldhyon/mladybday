@@ -2686,7 +2686,7 @@ a {
 .bgm-ctl.is-muted .bgm-mute .w { display: none; }
 .bgm-ctl.is-muted .bgm-mute .x { display: inline; }
 .bgm-vol {
-  --p: 35%;
+  --p: 50%;
   -webkit-appearance: none;
   appearance: none;
   width: 84px;

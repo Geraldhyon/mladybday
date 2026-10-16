@@ -1,7 +1,9 @@
+const sfx = (n) => { if (typeof bgm !== "undefined") bgm.sfx(n); };
 function goTo(pageId) {
   const current = document.querySelector(".page.active");
   const target = document.getElementById(pageId);
   if (!current || !target || current === target) return;
+  sfx("whoosh");
   if (pageId === "page2" && typeof resetGift === "function") resetGift();
   current.classList.remove("active");
   setTimeout(() => {
@@ -129,6 +131,7 @@ function renderParagraph(instant) {
   typeParagraph(paragraphs[currentParagraph], instant);
 }
 function nextParagraph() {
+  sfx("tap");
   if (!typingDone) {
     finishTyping();
     return;
@@ -139,6 +142,7 @@ function nextParagraph() {
   }
 }
 function prevParagraph() {
+  sfx("tap");
   if (currentParagraph > 0) {
     currentParagraph--;
     renderParagraph();
@@ -164,6 +168,7 @@ function resetGift() {
 function openGift() {
   if (giftBusy) return;
   giftBusy = true;
+  sfx("sparkle");
   const btn = document.getElementById("toMemoriesBtn");
   const at = (ms, fn) => giftTimers.push(setTimeout(fn, ms));
   if (reduceMotion) {
@@ -555,6 +560,7 @@ function openFlowerLetter() {
   const root = document.getElementById("flRoot");
   if (!root || root.classList.contains("open") || root.classList.contains("shake")) return;
   root.classList.add("shake");
+  sfx("leaf");
   flTimer = setTimeout(() => {
     root.classList.remove("shake");
     root.classList.add("open");
@@ -616,11 +622,13 @@ let openEnvelopeCard = null;
 function openEnvelope(cardEl, key) {
   if (cardEl.classList.contains("opening")) return;
   cardEl.classList.add("opening");
+  sfx(key === "notes" ? "paper" : key === "flower" ? "leaf" : "vinyl");
   openEnvelopeCard = cardEl;
   setTimeout(() => openModal(key), 620);
 }
 let mpClosing = false;
 function closeModal() {
+  sfx("tap");
   stopMusic();
   clearTimeout(flTimer);
   const ov = document.getElementById("modalOverlay");
@@ -700,9 +708,10 @@ function goToFinal() {
 function blowCandle() {
   if (candleBlown) return;
   candleBlown = true;
+  sfx("blow");
   document.getElementById("cakeWrap").classList.add("blown");
   document.getElementById("candleHint").style.opacity = "0";
-  setTimeout(launchConfetti, 700);
+  setTimeout(() => { sfx("sparkle"); launchConfetti(); }, 700);
   setTimeout(() => {
     document.getElementById("finalCard").classList.add("show");
   }, 1300);
