@@ -1,6 +1,6 @@
 # For Milady <3
 
-*A little website made with love, just for her.*
+*Some feelings are better written in code..*
 
 ## About This Project
 
@@ -12,30 +12,29 @@ That's why I decided to turn my birthday wishes into a website.
 
 ## Why I Made This
 
-I made this website because, at the time, I wanted to give you something that was a little different from the usual birthday wishes. Something I could make with my own hands, built from little pieces of my time, effort, and affection for you.
+I made this website because, at the time, I wanted to give her something that was a little different from the usual birthday wishes. Something I could make with my own hands, built from little pieces of my time, effort, and affection for her.
 
-I wanted to make you smile, even if only for a little while. I wanted you to have something that wasn't just another message that would eventually get buried in a chat, but something you could open and experience for yourself.
+I wanted to make her smile, even if only for a little while. I wanted her to have something that wasn't just another message that would eventually get buried in a chat, but something she could open and experience for herself.
 
-Things may not be the same between us anymore, and maybe the place we once had in each other's lives has changed. But that doesn't mean the happiness I wished for you back then was any less genuine.
+Things may not be the same between us anymore, and maybe the place we once had in each other's lives has changed. But that doesn't mean the happiness I wished for her back then was any less genuine.
 
-I made this when you were someone I wanted to make feel special. And even though things are different now, I don't feel the need to pretend that those feelings never existed.
+I made this when she was someone I wanted to make feel special. And even though things are different now, I don't feel the need to pretend that those feelings never existed.
 
 Maybe that's what this website is to me now. A little piece of a time when I cared about someone deeply enough to turn my feelings into something real.
 
 I'm not making this to change anything between us, nor to ask for anything in return. I just wanted to leave something behind that came from a sincere place in my heart.
 
-Whatever life looks like for us now, I hope it continues to bring you beautiful things, quiet happiness, and reasons to smile, even on days when things aren't so easy.
+Whatever life looks like for us now, I hope it continues to bring her beautiful things, quiet happiness, and reasons to smile, even on days when things aren't so easy.
 
-And if you ever find yourself looking back at this someday, I hope you remember it not with sadness, but with a little warmth.
+And if she ever finds herself looking back at this someday, I hope she remembers it not with sadness, but with a little warmth.
 
 ## The Idea Behind It
 
-The idea behind this website came from the little things you once shared with me.
+The idea behind this website came from the little things she once shared with me.
 
-The things you liked, the things that made you happy, and the little details about yourself that you told me along the way. I kept them in mind when putting this website together, hoping I could turn some of those things into something you would enjoy.
+The things she liked, the things that made her happy, and the little details about herself that she told me along the way. I kept them in mind when putting this website together, hoping I could turn some of those things into something she would enjoy.
 
-So, I built it around the things I remembered about you, adding little details and interactions that I hoped would make you smile. Even though I couldn't include everything, the things you'll find here are the ones you've told me about the most, the little things you've shared with me that stayed in my mind, even long after our conversations ended.
-
+So, I built it around the things I remembered about her, adding little details and interactions that I hoped would make her smile. Even though I couldn't include everything, the things you'll find here are the ones she told me about the most, the little things she shared with me that stayed in my mind, even long after our conversations ended.
 
 ## Built With
 
