@@ -51,10 +51,10 @@ function playPage3Entrance(base) {
 document.getElementById("page1").addEventListener("click", () => goTo("page2"));
 const paragraphs = [
   "Hawo cantikkk, selamat ulang tahun ya :>.. ",
-  "mmm jadi aku ngebuat ini buat ngerayain ultah kamu HEHE",
+  "So... I made this little something just for you to celebrate your special day. HEHE",
   "first of all, hope u re feeling well and happy as you open this. ",
-  "little guide, just click click and dont forget the cake :3",
-  "To: Valenza"
+  "A little guide before we begin: just click, click, and dont forget 'the cake' :3",
+  "To: My dearest Valenza"
 ];
 let currentParagraph = 0;
 let typingTimer = null;
