@@ -2104,7 +2104,7 @@ a {
 #page3 .back-btn.p3-back {
   width: clamp(44px, calc(9*var(--u)), 66px);
   height: auto;
-  aspect-ratio: 34/36;
+  aspect-ratio: 1;
 }
 #page3 .memories-title {
   position: relative;
@@ -2716,3 +2716,28 @@ a {
 }
 .bgm-vol:focus-visible, .bgm-mute:focus-visible { outline: 2px dashed var(--rose-deep); outline-offset: 2px; }
 @media (max-width: 380px) { .bgm-vol { width: 60px; } }
+
+.gh-btn {
+  position: absolute;
+  top: calc(18px + env(safe-area-inset-top, 0px));
+  right: calc(18px + env(safe-area-inset-right, 0px));
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: #FFF1F5;
+  border: 3px solid var(--plum);
+  box-shadow: 3px 3px 0 var(--rose);
+  color: var(--plum);
+  transition: transform 0.12s steps(2), box-shadow 0.12s steps(2);
+}
+.gh-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--rose);
+}
+.gh-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 var(--rose);
+}
