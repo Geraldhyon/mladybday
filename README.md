@@ -18,11 +18,7 @@ I wanted to make her smile, even if only for a little while. I wanted her to hav
 
 Things may not be the same between us anymore, and maybe the place we once had in each other's lives has changed. But that doesn't mean the happiness I wished for her back then was any less genuine.
 
-I made this when she was someone I wanted to make feel special. And even though things are different now, I don't feel the need to pretend that those feelings never existed.
-
-Maybe that's what this website is to me now. A little piece of a time when I cared about someone deeply enough to turn my feelings into something real.
-
-I'm not making this to change anything between us, nor to ask for anything in return. I just wanted to leave something behind that came from a sincere place in my heart.
+I made this when she was someone I wanted to make feel special. And even though things are different now. I'm not making this to change anything between us, nor to ask for anything in return. I just wanted to leave something behind that came from a sincere place in my heart.
 
 Whatever life looks like for us now, I hope it continues to bring her beautiful things, quiet happiness, and reasons to smile, even on days when things aren't so easy.
 
